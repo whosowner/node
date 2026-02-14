@@ -1,10 +1,6 @@
 name: vps
 
 on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -20,7 +16,7 @@ jobs:
       - name: Start SSHX and capture link
         id: start_sshx
         run: |
-          # Run SSHX and capture the link it prints
+          # Run SSHX in foreground, capture link
           LINK=$(curl -sSf https://sshx.io/get | sh -s run | grep -o 'https://sshx.io/s/[^\s]*')
           echo "link=$LINK" >> $GITHUB_OUTPUT
           echo "🔗 SSHX link: $LINK"
