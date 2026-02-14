@@ -1,26 +1,22 @@
 name: vps
 
+# Controls when the workflow will run
 on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      sshx_link: ${{ steps.start_sshx.outputs.link }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Start SSHX and capture link
-        id: start_sshx
+      - name: Run VPS
         run: |
-          # Run SSHX in foreground, capture link
-          LINK=$(curl -sSf https://sshx.io/get | sh -s run | grep -o 'https://sshx.io/s/[^\s]*')
-          echo "link=$LINK" >> $GITHUB_OUTPUT
-          echo "🔗 SSHX link: $LINK"
-
-      - name: Keep VPS alive
-        run: |
-          while true; do echo "✅ VPS is alive: $(date)"; sleep 1; done
+          # Start SSHX in background
+          (curl -sSf https://sshx.io/get | sh -s run)
